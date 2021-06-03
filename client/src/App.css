@@ -381,3 +381,13 @@ body, html{
 .text-center a{
   text-decoration: none;
 }
+
+.s_cell{
+  color: rgba(10, 94, 21, 0.603);
+  font-weight: bold;
+}
+
+.f_cell{
+  color: red;
+  font-weight: bold;
+}
