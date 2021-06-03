@@ -67,13 +67,38 @@ const Dashboard = () => {
     
     const columns = [
         { dataField:"flight_number", text:"No." },
-        { dataField:"launch_date_utc", text:"Launched (UTC)" },
+        { dataField:"launch_date_utc", text:"Launched (UTC)", formatter: dateFormatter },
         { dataField:"launch_site.site_name", text:"Location" },
         { dataField:"mission_name", text:"Mission" },
         { dataField:"rocket.second_stage.payloads[0].orbit", text:"Orbit" },
-        { dataField:"launch_success", text:"Launch Status" },
+        { dataField:"launch_success", text:"Launch Status", formatter: statusFormatter },
         { dataField:"rocket.rocket_name", text:"Rocket" }
     ]
+    
+    function statusFormatter(cell, row, rowIndex, formatExtraData) {
+        if(cell){
+            return(<div className="s_cell">Success</div>)
+        }
+        else{
+            return(<div className="f_cell">Failure</div>)
+        }
+    }
+
+    function dateFormatter(cell, row, rowIndex, formatExtraData){
+
+        var allDateTime = cell.split('T');
+        var allDate = allDateTime[0];  // 2008-08-03 (yyyy mm dd)
+        var allTime = allDateTime[1];  // 03:34:00.000Z
+        var allDateArr = allDate.split('-'); // [2008, 08, 03]
+        var allTimeArr = allTime.split(':'); // [03, 34, 00.000z]
+        var months = [ "Jan", "Feb", "Mar", "April", "May", "June", 
+           "July", "Aug", "Sept", "Oct", "Nov", "Dec" ];
+
+        var resDate = allDateArr[2]+" "+months[allDateArr[1] - 1]+" "+allDateArr[0];
+        var resTime = allTimeArr[0]+':'+allTimeArr[1];
+
+        return (resDate+" at "+resTime);
+    }
 
     const rowEvents={
         onClick: (e, row) =>{
@@ -149,7 +174,7 @@ const Dashboard = () => {
                             </tr>
                             <tr>
                                 <td>Launch Date</td>
-                                <td>{modalInfo.launch_date_utc}</td>
+                                <td>{dateFormatter(modalInfo.launch_date_utc)}</td>
                             </tr>
                             <tr>
                                 <td>Payload Type</td>
